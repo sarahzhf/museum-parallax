@@ -45,7 +45,7 @@ export default function Gallery3D({
     []
   )
 
-  // 🔥 SCROLL SUR 200 UNITÉS
+  //  SCROLL SUR 200 UNITÉS
   useFrame(({ camera }) => {
     if (groupRef.current) {
       const targetX = -scrollProgress * 200
