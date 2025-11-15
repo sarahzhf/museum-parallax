@@ -41,6 +41,7 @@ export type Artwork = {
   image: string
   description: string
   position: [number, number, number]
+  order: number
 }
 
 interface ArtworkMeshProps {

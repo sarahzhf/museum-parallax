@@ -11,6 +11,7 @@ export interface Artwork {
   dimensions?: string
   location?: string
   position: [number, number, number]
+  order: number
 }
 
 export const artworks: Artwork[] = [
@@ -28,6 +29,7 @@ export const artworks: Artwork[] = [
     dimensions: "73.7 cm × 92.1 cm",
     location: "Museum of Modern Art, New York",
     position: [-10, 1, -4],
+    order: 4,
   },
   {
     id: 2,
@@ -43,6 +45,7 @@ export const artworks: Artwork[] = [
     dimensions: "77 cm × 53 cm",
     location: "Musée du Louvre, Paris",
     position: [-28, -0.5, -4],
+    order: 1,
   },
   {
     id: 3,
@@ -58,6 +61,7 @@ export const artworks: Artwork[] = [
     dimensions: "200 cm × 200 cm",
     location: "Musée de l'Orangerie, Paris",
     position: [-21, 1.5, -4],
+    order: 2,
   },
   {
     id: 4,
@@ -73,6 +77,7 @@ export const artworks: Artwork[] = [
     dimensions: "349.3 cm × 776.6 cm",
     location: "Museo Reina Sofía, Madrid",
     position: [-14, 0, -4],
+    order: 3,
   },
   {
     id: 5,
@@ -88,6 +93,7 @@ export const artworks: Artwork[] = [
     dimensions: "25.7 cm × 37.8 cm",
     location: "British Museum, Londres",
     position: [-7, -1, -4],
+    order: 5,
   },
   {
     id: 6,
@@ -103,6 +109,7 @@ export const artworks: Artwork[] = [
     dimensions: "24 cm × 33 cm",
     location: "Museum of Modern Art, New York",
     position: [0, 1, -4],
+    order: 6,
   },
   {
     id: 7,
@@ -118,6 +125,7 @@ export const artworks: Artwork[] = [
     dimensions: "91 cm × 73.5 cm",
     location: "Galerie nationale d'Oslo",
     position: [7, -0.5, -4],
+    order: 7,
   },
   {
     id: 8,
@@ -133,6 +141,7 @@ export const artworks: Artwork[] = [
     dimensions: "78 cm × 65.3 cm",
     location: "Art Institute of Chicago",
     position: [14, 1.5, -4],
+    order: 8,
   },
   {
     id: 9,
@@ -148,6 +157,7 @@ export const artworks: Artwork[] = [
     dimensions: "44.5 cm × 39 cm",
     location: "Mauritshuis, La Haye",
     position: [21, 0, -4],
+    order: 9,
   },
   {
     id: 10,
@@ -163,6 +173,7 @@ export const artworks: Artwork[] = [
     dimensions: "243.9 cm × 233.7 cm",
     location: "Museum of Modern Art, New York",
     position: [28, -1, -4],
+    order: 10,
   },
   {
     id: 11,
@@ -178,6 +189,7 @@ export const artworks: Artwork[] = [
     dimensions: "280 cm × 570 cm",
     location: "Chapelle Sixtine, Vatican",
     position: [35, 1, -4],
+    order: 11,
   },
   {
     id: 12,
@@ -193,5 +205,6 @@ export const artworks: Artwork[] = [
     dimensions: "260 cm × 325 cm",
     location: "Musée du Louvre, Paris",
     position: [42, 0.5, -4],
+    order: 12,
   },
 ]

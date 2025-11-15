@@ -13,23 +13,38 @@ function normalize(s: string) {
 async function smartMatch(text: string) {
   const q = normalize(text)
 
-  // 1) match direct par mot-clé
+  // 1) match direct par titre exact
   let found = artworks.find(a => q.includes(normalize(a.title)))
   if (found) return found
 
-  // 2) GPT devine
+  // 2) match par titre simplifié ou artiste
+  for (const a of artworks) {
+    const short = normalize(a.title.replace(/la |le |les |the /gi, "").trim())
+    if (q.includes(short)) return a
+
+    const artist = normalize(a.artist)
+    if (q.includes(artist)) return a
+  }
+
+  // 3) match par "tableau numéro X"
+  const num = q.match(/num[eé]ro\s+(\d+)/)
+  if (num) {
+    const idx = parseInt(num[1], 10)
+    return artworks.find(a => a.order === idx)
+  }
+
+  // 4) GPT devine un titre
   const res = await client.responses.create({
     model: "gpt-4o-mini",
     input: [
       {
         role: "system",
-        content: `Tu renvoies STRICTEMENT un titre parmi : ${artworks
+        content: `Renvoie EXACTEMENT un titre parmi : ${artworks
           .map(a => `"${a.title}"`)
-          .join(", ")}  
-Si aucun ne correspond exactement → renvoie "null".`,
+          .join(", ")} ou "null".`
       },
-      { role: "user", content: text },
-    ],
+      { role: "user", content: text }
+    ]
   })
 
   const out = res.output_text.trim()
@@ -45,7 +60,75 @@ export async function POST(req: Request) {
   const last = messages[messages.length - 1].text.toLowerCase()
   let detectedAction = null
 
- 
+  // 🔢 Détection : premier, deuxième, numéro X
+  const positionIntent = /(\bpremier\b|\bdeuxieme\b|\bdeuxième\b|\btroisieme\b|\btroisième\b|\bquatrieme\b|\bquatrième\b|\bcinquieme\b|\bcinquième\b|\bsixieme\b|\bsixième\b|\bnum[eé]ro\s+\d+)/
+  if (positionIntent.test(last)) {
+    let index = null
+
+    if (last.includes("premier")) index = 1
+    else if (last.includes("deuxieme") || last.includes("deuxième")) index = 2
+    else if (last.includes("troisieme") || last.includes("troisième")) index = 3
+    else if (last.includes("quatrieme") || last.includes("quatrième")) index = 4
+    else if (last.includes("cinquieme") || last.includes("cinquième")) index = 5
+    else if (last.includes("sixieme") || last.includes("sixième")) index = 6
+    else {
+      const m = last.match(/num[eé]ro\s+(\d+)/)
+      if (m) index = parseInt(m[1], 10)
+    }
+
+    const target = artworks.find(a => a.order === index)
+
+    if (target) {
+      return NextResponse.json({
+        output: `Le tableau numéro ${index} est « ${target.title} ». Tu veux que je te donne une description complète ?`,
+        action: { type: "ZOOM_ARTWORK", artworkId: target.id }
+      })
+    }
+
+    return NextResponse.json({
+      output: `Je n’ai trouvé aucun tableau au numéro ${index}.`,
+      action: null
+    })
+  }
+
+  // 🖼️ Détection : "à gauche / à droite / à côté"
+  const sideIntent =
+    last.includes("à côté") ||
+    last.includes("a cote") ||
+    last.includes("à gauche") ||
+    last.includes("a gauche") ||
+    last.includes("à droite") ||
+    last.includes("a droite")
+
+  if (sideIntent) {
+    const match = await smartMatch(normalize(last))
+
+    if (match && match.order != null) {
+      let target = null
+
+      if (last.includes("gauche")) {
+        target = artworks.find(a => a.order === match.order - 1)
+      } else if (last.includes("droite")) {
+        target = artworks.find(a => a.order === match.order + 1)
+      } else {
+        target = artworks.find(a => Math.abs(a.order - match.order) === 1)
+      }
+
+      if (target) {
+        return NextResponse.json({
+          output: `Le tableau à côté de « ${match.title} » est « ${target.title} ». Tu veux que je te donne une description complète ?`,
+          action: { type: "ZOOM_ARTWORK", artworkId: target.id }
+        })
+      }
+
+      return NextResponse.json({
+        output: `Je connais « ${match.title} », mais il n’y a pas de tableau juste à côté.`,
+        action: null
+      })
+    }
+  }
+
+  // 🔍 Détection intention zoom
   const zoomIntent =
     last.includes("agrandis") ||
     last.includes("zoom") ||
@@ -54,32 +137,29 @@ export async function POST(req: Request) {
     last.includes("affiche")
 
   if (zoomIntent) {
-    const match = await smartMatch(last)
+    const match = await smartMatch(normalize(last))
 
     if (match) {
       detectedAction = { type: "ZOOM_ARTWORK", artworkId: match.id }
 
       return NextResponse.json({
-        output: `Très bien, j’agrandis « ${match.title} ».  
-Souhaites-tu une description complète ?`,
-        action: detectedAction,
+        output: `Très bien, j’agrandis « ${match.title} ». Souhaites-tu une description complète ?`,
+        action: detectedAction
       })
     }
   }
 
- 
-  const yes = ["oui", "yes", "ok", "vas y", "vas-y", "daccord", "d'accord"]
-    .includes(last.trim())
+  // ✔ Si user dit oui = description
+  const yes = ["oui", "yes", "ok", "vas y", "vas-y", "daccord", "d'accord"].includes(last.trim())
 
   if (yes && artwork) {
     return NextResponse.json({
       output: `Voici la description complète de « ${artwork.title} » :\n\n${artwork.description}`,
-      action: null,
+      action: null
     })
   }
 
-
-
+  // 🤖 Réponse normale
   type ChatMessage = {
     from: "user" | "bot"
     text: string
@@ -91,25 +171,22 @@ Souhaites-tu une description complète ?`,
       {
         role: "system",
         content: `
-Tu es un guide virtuel d’un musée 3D interactif.
-
-RÈGLES IMPORTANTES :
-- Ne jamais dire “je ne peux pas agrandir des images”.
-- Si l’utilisateur demande un zoom/agrandissement, laisse le backend gérer. Tu ne refuses JAMAIS.
-- Tu restes toujours utile, poli et simple.
-- Si l’utilisateur répond “oui” après une proposition de description → tu donnes immédiatement la description complète.
-- Tu parles de manière naturelle, humaine, concise.
-        `,
+Tu es un guide virtuel du musée.
+- Tu ne refuses jamais une action.
+- Tu restes simple, humain et utile.
+- Quand l'utilisateur demande un zoom, le backend le gère.
+- Si l'utilisateur dit "oui", tu donnes la description complète.
+`
       },
       ...messages.map((m: ChatMessage) => ({
         role: m.from === "user" ? "user" : "assistant",
-        content: m.text,
-      })),
-    ],
+        content: m.text
+      }))
+    ]
   })
 
   return NextResponse.json({
     output: response.output_text,
-    action: detectedAction,
+    action: detectedAction
   })
 }
