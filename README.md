@@ -71,7 +71,7 @@ museum-parallax/
 
 1️⃣ Cloner le projet
 
-git clone https://github.com/USERNAME/museum-parallax.git
+git clone https://github.com/sarahzhf/museum-parallax.git
 cd museum-parallax
 
 2️⃣ Installer les dépendances
@@ -136,6 +136,7 @@ git push origin main
 	•	TypeScript
 	•	OpenAI GPT-4o-mini
 	•	Vercel
+
 
 
 
