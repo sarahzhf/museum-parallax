@@ -150,3 +150,4 @@ Possible future improvements
 	•	Voice-based interaction
 	•	Enhanced artwork clustering and suggestions
 
+

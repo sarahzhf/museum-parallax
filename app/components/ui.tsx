@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { ChevronDown, Search, Heart, Share2, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -11,6 +12,22 @@ interface UIProps {
 export default function UI({ scrollProgress }: UIProps) {
   const [showInstructions, setShowInstructions] = useState(true)
   const [currentArtwork, setCurrentArtwork] = useState("")
+  const [searchOpen, setSearchOpen] = useState(false)
+  const artworks = [
+    { title: "La Nuit Étoilée", image: "/images/starry-night.png" },
+    { title: "La Joconde", image: "/images/mona-lisa.png" },
+    { title: "Les Nymphéas", image: "/images/water-lilies.png" },
+    { title: "Guernica", image: "/images/guernica.png" },
+    { title: "La Grande Vague", image: "/images/great-wave.png" },
+    { title: "La Persistance de la Mémoire", image: "/images/persistence-memory.png" },
+    { title: "Le Cri", image: "/images/the-scream.png" },
+    { title: "American Gothic", image: "/images/american-gothic.png" },
+    { title: "La Jeune Fille à la Perle", image: "/images/girl-with-pearl.png" },
+    { title: "Les Demoiselles d'Avignon", image: "/images/demoiselles-avignon.png" },
+    { title: "La Création d'Adam", image: "/images/creation-adam.png" },
+    { title: "La Liberté guidant le peuple", image: "/images/liberty-leading.png" },
+    { title: "Man with a Parot", image: "/images/man-with-a-parot.png" }
+  ]
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,6 +61,21 @@ export default function UI({ scrollProgress }: UIProps) {
 
   return (
     <>
+      <style jsx global>{`
+        @keyframes slide-left {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-left {
+          animation: slide-left 0.45s ease-out;
+        }
+      `}</style>
       {/* Navigation ultra classe */}
       <nav className="fixed top-0 left-0 right-0 z-50 p-6">
         <div className="flex justify-between items-center backdrop-blur-md bg-black/20 rounded-2xl px-8 py-4 border border-gold/20">
@@ -52,7 +84,12 @@ export default function UI({ scrollProgress }: UIProps) {
             <p className="text-sm text-white/70">Galerie Royale d'Art</p>
           </div>
           <div className="flex gap-4">
-            <Button variant="ghost" size="icon" className="text-white hover:bg-gold/20 hover:text-gold transition-all">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-gold/20 hover:text-gold transition-all"
+              onClick={() => setSearchOpen(true)}
+            >
               <Search className="h-5 w-5" />
             </Button>
             <Button variant="ghost" size="icon" className="text-white hover:bg-gold/20 hover:text-gold transition-all">
@@ -128,6 +165,34 @@ export default function UI({ scrollProgress }: UIProps) {
           </div>
         </div>
       </div>
+      {searchOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm"
+             onClick={() => setSearchOpen(false)}>
+          <div
+            className="absolute right-0 top-0 h-full w-[380px] bg-black/60 backdrop-blur-xl border-l border-gold/40 p-6 overflow-y-auto animate-slide-left"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-2xl font-light mb-6 text-gold">Voir une œuvre</h2>
+
+            <div className="flex flex-col gap-4">
+              {artworks.map((art, i) => (
+                <a
+                  key={i}
+                  href={`https://artsandculture.google.com/search?q=${encodeURIComponent(art.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-4 bg-black/30 border border-gold/30 rounded-xl p-4 hover:bg-black/40 transition-all cursor-pointer"
+                >
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-gold/40">
+                    <Image src={art.image} alt={art.title} fill className="object-cover" />
+                  </div>
+                  <span className="text-white text-lg">{art.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
