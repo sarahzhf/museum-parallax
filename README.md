@@ -1,150 +1,151 @@
- Museum Parallax (AI-Enhanced Virtual Art Gallery)
+Virtual Museum Guide (Generative AI Project)
 
- Overview
+1. Introduction
 
-Versailles Museum Parallax is an immersive 3D virtual art gallery built with
-Next.js + React Three Fiber + OpenAI GPT.
-Users can walk through a gallery, view paintings, and interact with a virtual AI guide capable of:
-	•	identifying artworks
-	•	describing them
-	•	zooming on request
-	•	locating paintings by left/right/next
-	•	answering questions naturally
+This project is an innovative virtual museum experience combining immersive 3D navigation and a generative AI assistant.
+Users can explore a realistic art gallery and interact with a virtual guide able to identify artworks, answer questions, provide descriptions, and trigger actions such as zooming on a painting.
 
-The AI guide is connected to Langfuse, providing full MLOps observability, production monitoring, and trace visualization.
+The objective of this project is to demonstrate the practical use of generative AI models, prompt engineering, backend logic, monitoring tools, and good development practices.
 
 
- Features
+2. Project Features
 
-3D Gallery
-	•	Full interactive scene in React Three Fiber
-	•	Smooth camera movement
-	•	Dynamic artworks with position + metadata
-	•	Zoom-in animations
+2.1 3D Immersive Museum
+	•	Built with React Three Fiber (WebGL).
+	•	Interactive environment with a progressive navigation bar.
+	•	High-quality framed artworks positioned in 3D space.
+	•	Responsive layout and smooth transitions.
 
- AI Virtual Guide (Chatbot)
-	•	Smart artwork detection
-	•	Natural conversation
-	•	“Zoom this artwork” → triggers backend action
-	•	“What is the painting next to the Mona Lisa?” → detection + response
-	•	Multi-step dialogue with memory
+2.2 Generative AI Chatbot
+	•	Powered by OpenAI GPT-4o-mini.
+	•	Understands natural language requests.
+	•	Identifies paintings using a hybrid approach:
+	•	local metadata matching,
+	•	positional reasoning (first, second, left of, right of),
+	•	fallback to model inference when needed.
+	•	Can trigger actions such as zooming on a painting.
+	•	Provides detailed descriptions of each artwork.
 
- Smart Reasoning Pipeline
-	•	Custom smartMatch() algorithm
-	•	Fuzzy title matching
-	•	Artist recognition
-	•	Automatic fallback to GPT
+2.3 Smart Artwork Matching System
+	•	Normalization pipeline to handle accents and variations.
+	•	Keyword extraction for titles and artists.
+	•	Positional matching using artwork order.
+	•	Fallback to LLM classification for ambiguous queries.
 
- MLOps Monitoring (Langfuse)
+2.4 MLOps and Observability with Langfuse
+	•	Full integration of Langfuse to monitor:
+	•	requests,
+	•	traces,
+	•	model generations,
+	•	actions triggered by the user.
+	•	All interactions from both local development and Vercel deployment are logged.
+	•	Each API call is associated with a Langfuse trace and events for analysis.
 
-Fully integrated observability for local AND production:
-	•	Traces (full conversation view)
-	•	Spans (smartMatch, OpenAI calls…)
-	•	Events (zoom, left/right navigation, user actions)
-	•	Inputs / outputs logged
-	•	Errors captured
-
-Everything is tracked both locally AND on Vercel deployment.
+2.5 Deployment
+	•	Application deployed on Vercel.
+	•	API routes handled through Next.js Server Functions.
 
 
+3. Technologies Used
 
-Technologies
-	•	Next.js 15
+Frontend
+	•	React
+	•	Next.js
 	•	React Three Fiber
+	•	Drei utilities
+	•	TailwindCSS
+
+Backend
+	•	Next.js API routes
 	•	OpenAI API
-	•	Langfuse (monitoring & MLOps)
-	•	Typescript
-	•	Vercel Deployment
+	•	Langfuse monitoring
+
+Storage
+	•	Local JSON-based metadata for artworks
+	•	Static image hosting in /public
 
 
+4. Project Structure
 
- Installation & Setup
+app/
+  api/
+    chat/
+      route.ts        → chatbot logic, Langfuse tracing, OpenAI responses
+  components/
+    gallery-3d.tsx    → 3D museum environment
+    artwork-mesh.tsx  → rendering of each artwork in 3D
+    chatbot.tsx       → frontend chat interface
+  data/
+    artworks.ts       → metadata and positions of all artworks
+public/
+  images/             → artwork images
+.env.local            → API keys (OpenAI, Langfuse)
 
-1️ Clone the project
 
-git clone <repo-url>
+5. Installation and Setup
+
+5.1 Requirements
+	•	Node.js (v18 or higher)
+	•	An OpenAI API key
+	•	A Langfuse project (public and secret keys)
+
+5.2 Clone the repository
+
+git clone <repository-url>
 cd museum-parallax
 
-2️ Install dependencies
+5.3 Install dependencies
 
 npm install
 
-If you have peer dependency conflicts:
+5.4 Environment configuration
 
-npm install --legacy-peer-deps
+Create a .env.local file at the project root:
 
-3️ Add environment variables
-
-Create .env.local :
-
-OPENAI_API_KEY=sk-xxxx
-LANGFUSE_SECRET_KEY=lfsk_xxx
-LANGFUSE_PUBLIC_KEY=lfpk_xxx
+OPENAI_API_KEY=your_key
+LANGFUSE_SECRET_KEY=your_key
+LANGFUSE_PUBLIC_KEY=your_key
 LANGFUSE_BASE_URL=https://cloud.langfuse.com
 
- About Langfuse in Production
-
-To enable MLOps monitoring on Vercel, add the same keys in:
-
-Vercel → Project → Settings → Environment Variables
-
-Your chatbot will then be monitored in real-time on Langfuse, even for users on the deployed website.
-
-
-▶️ Run Locally
+5.5 Start local server
 
 npm run dev
 
-Visit:
-👉 http://localhost:3000
-
- Deployment
-
-Deploy automatically with Vercel:
-	•	Every commit to main triggers a deployment
-	•	Environment variables must be added manually in Vercel
-	•	Once deployed, all AI interactions are logged in Langfuse
-
- MLOps Integration (Langfuse)
-
- What is logged?
-
-For every user message:
-	•	A trace is created
-	•	A generation span for the OpenAI call
-	•	An event if the user asks to zoom / left / right
-	•	A chatbot-response event with output
-	•	A full timeline of user queries
+The application will be available at http://localhost:3000.
 
 
- Project File Structure
-
-app/
- ├─ api/
- │   └─ chat/route.ts      # AI logic + Langfuse monitoring
- ├─ components/
- │   ├─ gallery-3d.tsx
- │   ├─ artwork-mesh.tsx
- │   └─ chatbot.tsx
- ├─ data/
- │   └─ artworks.ts
- └─ page.tsx
-public/
- └─ images/
-
-
- route.ts (AI + Langfuse)
-
-All AI reasoning and MLOps logging happens here:
-	•	Smart artwork matching
-	•	Direction detection (left/right/next to…)
-	•	Zoom detection
-	•	Description logic
-	•	Trace creation
-	•	Span recording
-	•	Event logging
+6. How the Chatbot Works
+	1.	The user sends a message.
+	2.	The backend normalizes the text and runs several detection rules:
+	•	numerical intent (“first painting”, “number 3”)
+	•	spatial intent (“left of the Mona Lisa”, “next to”)
+	•	direct title or artist name matching
+	3.	The system selects the right artwork or falls back to OpenAI classification.
+	4.	Langfuse logs:
+	•	a trace containing the full conversation
+	•	events for each triggered action
+	•	a generation record for the LLM call
+	5.	The backend returns:
+	•	a natural-language response
+	•	an optional action (zoom)
 
 
+7. Deployment on Vercel
+
+The project is deployed on Vercel:
+	•	Automatic deployment triggered by GitHub pushes
+	•	Environment variables configured in Vercel Dashboard
+	•	Langfuse logs both local and production interactions
 
 
+8. Limitations and Improvements
 
+Current limitations
+	•	Only a single room is implemented.
+	•	No audio guide yet.
+	•	No multi-modal analysis (image uploads) for now.
+
+Possible future improvements
+	•	Adding multiple rooms with navigation
+	•	Voice-based interaction
+	•	Enhanced artwork clustering and suggestions
