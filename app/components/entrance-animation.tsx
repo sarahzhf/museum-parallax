@@ -36,11 +36,11 @@ export default function EntranceAnimation({ onComplete }: EntranceAnimationProps
           className="text-center"
         >
           <h1 className="text-8xl md:text-9xl font-light text-white mb-8 tracking-wider">
-            VERSAILLES
+            NEURA AI
           </h1>
 
           <h2 className="text-4xl md:text-6xl font-light text-gold mb-6">
-            Galerie Royale d'Art
+            Galerie d'Art Virtuelle
           </h2>
 
           <p className="text-2xl text-white/80">

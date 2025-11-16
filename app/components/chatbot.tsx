@@ -14,7 +14,7 @@ export default function Chatbot({ selectedArtwork, autoMessage, onAction }: Chat
   const [messages, setMessages] = useState([
     {
       from: "bot",
-      text: "Bonjour ! Je suis votre guide virtuel.",
+      text: "Bonjour ! Je suis votre guide virtuel. Comment puis-je vous aider ?",
     },
   ])
 

@@ -45,10 +45,15 @@ export default function Gallery3D({
     []
   )
 
-  //  SCROLL SUR 200 UNITÉS
   useFrame(({ camera }) => {
+    // Position initiale de la caméra (centrée)
+    if (camera.position.x === 0 && camera.position.z === 0) {
+      camera.position.set(-8, 2, 10)
+    }
+
+    // Déplacement horizontal du couloir
     if (groupRef.current) {
-      const targetX = -scrollProgress * 200
+      const targetX = -scrollProgress * 400
       groupRef.current.position.x = THREE.MathUtils.lerp(
         groupRef.current.position.x,
         targetX,
@@ -56,12 +61,19 @@ export default function Gallery3D({
       )
     }
 
-    // caméra suit doucement
-    const camTargetX = scrollProgress * 200 - 15
+    // Caméra suit horizontalement (comme avant)
+    const camTargetX = scrollProgress * 400 - 15
     cameraTargetRef.current.x = THREE.MathUtils.lerp(
       cameraTargetRef.current.x,
       camTargetX,
       0.05
+    )
+
+    // Déplacement réel de la caméra en X (pour aller un peu à gauche/droite)
+    camera.position.x = THREE.MathUtils.lerp(
+      camera.position.x,
+      camTargetX * 0.15,
+      0.1
     )
 
     camera.lookAt(cameraTargetRef.current)
@@ -90,20 +102,32 @@ export default function Gallery3D({
       <group ref={groupRef}>
         {/* Mur → 200 unités */}
         <mesh position={[0, 0, -6]}>
-          <planeGeometry args={[200, 18]} />
+          <planeGeometry args={[400, 18]} />
           <primitive object={materials.marbleMaterial} attach="material" />
         </mesh>
 
         {/* Sol → 200 unités */}
         <mesh position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[200, 25]} />
+          <planeGeometry args={[400, 25]} />
           <primitive object={materials.floorMaterial} attach="material" />
         </mesh>
 
         {/* Plafond → 200 unités */}
         <mesh position={[0, 6, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[200, 25]} />
+          <planeGeometry args={[400, 25]} />
           <meshStandardMaterial color="#f5f0e6" />
+        </mesh>
+
+        {/* Mur gauche */}
+        <mesh position={[-35, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <planeGeometry args={[25, 18]} />
+          <primitive object={materials.marbleMaterial} attach="material" />
+        </mesh>
+
+        {/* Mur droit */}
+        <mesh position={[100, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+          <planeGeometry args={[25, 18]} />
+          <primitive object={materials.marbleMaterial} attach="material" />
         </mesh>
 
         {/* Décor */}

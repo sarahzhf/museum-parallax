@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { ChevronDown, Search, Heart, Share2, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { artworks as artworksData } from "@/app/data/artworks"
 
 interface UIProps {
   scrollProgress: number
@@ -13,21 +14,6 @@ export default function UI({ scrollProgress }: UIProps) {
   const [showInstructions, setShowInstructions] = useState(true)
   const [currentArtwork, setCurrentArtwork] = useState("")
   const [searchOpen, setSearchOpen] = useState(false)
-  const artworks = [
-    { title: "La Nuit Étoilée", image: "/images/starry-night.png" },
-    { title: "La Joconde", image: "/images/mona-lisa.png" },
-    { title: "Les Nymphéas", image: "/images/water-lilies.png" },
-    { title: "Guernica", image: "/images/guernica.png" },
-    { title: "La Grande Vague", image: "/images/great-wave.png" },
-    { title: "La Persistance de la Mémoire", image: "/images/persistence-memory.png" },
-    { title: "Le Cri", image: "/images/the-scream.png" },
-    { title: "American Gothic", image: "/images/american-gothic.png" },
-    { title: "La Jeune Fille à la Perle", image: "/images/girl-with-pearl.png" },
-    { title: "Les Demoiselles d'Avignon", image: "/images/demoiselles-avignon.png" },
-    { title: "La Création d'Adam", image: "/images/creation-adam.png" },
-    { title: "La Liberté guidant le peuple", image: "/images/liberty-leading.png" },
-    { title: "Man with a Parot", image: "/images/man-with-a-parot.png" }
-  ]
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,26 +24,22 @@ export default function UI({ scrollProgress }: UIProps) {
   }, [])
 
   useEffect(() => {
-    // Déterminer l'œuvre actuelle basée sur le scroll
-    const artworkNames = [
-      "La Nuit Étoilée",
-      "La Joconde",
-      "Les Nymphéas",
-      "Guernica",
-      "La Grande Vague",
-      "La Persistance de la Mémoire",
-      "Le Cri",
-      "American Gothic",
-      "La Jeune Fille à la Perle",
-      "Les Demoiselles d'Avignon",
-      "La Création d'Adam",
-      "La Liberté guidant le peuple",
-      "Man with a Parot",
-    ]
+    if (!artworksData || artworksData.length === 0) {
+      setCurrentArtwork("");
+      return;
+    }
 
-    const index = Math.floor(scrollProgress * artworkNames.length)
-    setCurrentArtwork(artworkNames[Math.min(index, artworkNames.length - 1)] || artworkNames[0])
-  }, [scrollProgress])
+    const sorted = [...artworksData].filter(Boolean).sort((a, b) => a.order - b.order);
+    const total = sorted.length;
+
+    const index = Math.max(
+      0,
+      Math.min(Math.floor(scrollProgress * total), total - 1)
+    );
+
+    const selected = sorted[index];
+    setCurrentArtwork(selected ? selected.title : "");
+  }, [scrollProgress]);
 
   return (
     <>
@@ -80,8 +62,8 @@ export default function UI({ scrollProgress }: UIProps) {
       <nav className="fixed top-0 left-0 right-0 z-50 p-6">
         <div className="flex justify-between items-center backdrop-blur-md bg-black/20 rounded-2xl px-8 py-4 border border-gold/20">
           <div className="text-white">
-            <h1 className="text-3xl font-light tracking-wider text-gold">VERSAILLES</h1>
-            <p className="text-sm text-white/70">Galerie Royale d'Art</p>
+            <h1 className="text-3xl font-light tracking-wider text-gold">NEURA AI</h1>
+            <p className="text-sm text-white/70">Galerie d'Art Vituelle</p>
           </div>
           <div className="flex gap-4">
             <Button
@@ -175,7 +157,7 @@ export default function UI({ scrollProgress }: UIProps) {
             <h2 className="text-2xl font-light mb-6 text-gold">Voir une œuvre</h2>
 
             <div className="flex flex-col gap-4">
-              {artworks.map((art, i) => (
+              {[...artworksData].sort((a,b)=>a.order-b.order).map((art, i) => (
                 <a
                   key={i}
                   href={`https://artsandculture.google.com/search?q=${encodeURIComponent(art.title)}`}

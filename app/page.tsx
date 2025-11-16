@@ -32,7 +32,7 @@ export default function MuseumPage() {
       const scrollTop = window.scrollY
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
       const progress = docHeight > 0 ? scrollTop / docHeight : 0
-      setScrollProgress(progress)
+      setScrollProgress(Math.min(1, Math.max(0, progress)))
     }
     window.addEventListener("scroll", onScroll)
     return () => window.removeEventListener("scroll", onScroll)
