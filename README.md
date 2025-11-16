@@ -1,142 +1,148 @@
-Versailles — Musée 3D Parallax
+ Museum Parallax (AI-Enhanced Virtual Art Gallery)
 
-Une expérience immersive de galerie d’art en 3D avec navigation parallax, détails interactifs et guide virtuel intelligent.
+ Overview
 
-Ce projet propose un musée virtuel entièrement en 3D, conçu en Next.js + React + Three.js, avec un chatbot IA intégré capable :
-	•	d’expliquer les tableaux
-	•	d’identifier une œuvre même si l’utilisateur ne connaît pas son nom
-	•	de reconnaître :
-	•	« agrandis La Joconde »
-	•	« c’est quoi le tableau numéro 4 ? »
-	•	« celui à gauche de Guernica »
-	•	« le tableau à côté de la Joconde »
-	•	de zoomer automatiquement sur l’œuvre demandée
-	•	de donner une description complète sur demande
-	•	de répondre naturellement, comme un vrai guide humain
+Versailles Museum Parallax is an immersive 3D virtual art gallery built with
+Next.js + React Three Fiber + OpenAI GPT.
+Users can walk through a gallery, view paintings, and interact with a virtual AI guide capable of:
+	•	identifying artworks
+	•	describing them
+	•	zooming on request
+	•	locating paintings by left/right/next
+	•	answering questions naturally
 
-Fonctionnalités principales
+The AI guide is connected to Langfuse, providing full MLOps observability, production monitoring, and trace visualization.
 
-🔹 Galerie 3D immersive
-	•	Navigation parallax fluide (scroll → mouvement latéral dans la galerie)
-	•	Cadres et tableaux correctement positionnés
-	•	Caméra dynamique qui suit le déplacement
-	•	Animation d’agrandissement lorsqu’on clique sur un tableau
-	•	Modale détaillée avec description et informations artistiques
 
-🔹 Chatbot guide virtuel (IA)
+ Features
 
-Propulsé par OpenAI GPT-4o-mini, il peut :
-	•	reconnaître exactement un tableau grâce à smartMatch
-	•	comprendre les positions relatives :
-	•	« à gauche »
-	•	« à droite »
-	•	« à côté »
-	•	« premier tableau », « numéro 3 », etc.
-	•	envoyer une action ZOOM_ARTWORK au front
-	•	gérer des réponses humaines et naturelles
+3D Gallery
+	•	Full interactive scene in React Three Fiber
+	•	Smooth camera movement
+	•	Dynamic artworks with position + metadata
+	•	Zoom-in animations
 
-🔹 Gestion intelligente des tableaux
+ AI Virtual Guide (Chatbot)
+	•	Smart artwork detection
+	•	Natural conversation
+	•	“Zoom this artwork” → triggers backend action
+	•	“What is the painting next to the Mona Lisa?” → detection + response
+	•	Multi-step dialogue with memory
 
-Chaque œuvre dans artworks.ts possède :
+ Smart Reasoning Pipeline
+	•	Custom smartMatch() algorithm
+	•	Fuzzy title matching
+	•	Artist recognition
+	•	Automatic fallback to GPT
 
-order: number
+ MLOps Monitoring (Langfuse)
 
-Ce qui permet au chatbot de comprendre :
+Fully integrated observability for local AND production:
+	•	Traces (full conversation view)
+	•	Spans (smartMatch, OpenAI calls…)
+	•	Events (zoom, left/right navigation, user actions)
+	•	Inputs / outputs logged
+	•	Errors captured
 
-Commande utilisateur	Réaction
-« le tableau numéro 2 »	Affiche Les Nymphéas
-« à côté de la Joconde »	Cherche ordre 1 → donne ordre 2
-« à droite de Guernica »	Cherche ordre 3 → retourne ordre 4
-« agrandis la vague »	Agrandit automatiquement La Grande Vague
+Everything is tracked both locally AND on Vercel deployment.
 
 
 
-📁 Structure du projet
-
-museum-parallax/
- ├─ app/
- │   ├─ api/chat/route.ts    → logique du chatbot IA
- │   ├─ components/
- │   │   ├─ gallery-3d.tsx   → scène 3D principale
- │   │   ├─ artwork-mesh.tsx → affichage physique d’un tableau en 3D
- │   │   ├─ chatbot.tsx      → interface utilisateur du chatbot
- │   ├─ data/artworks.ts     → liste et positions des œuvres
- │   ├─ page.tsx             → page principale + canvas 3D
- ├─ public/images/           → images des œuvres
- ├─ README.md
+Technologies
+	•	Next.js 15
+	•	React Three Fiber
+	•	OpenAI API
+	•	Langfuse (monitoring & MLOps)
+	•	Typescript
+	•	Vercel Deployment
 
 
 
-⚙️ Installation & Lancement
+ Installation & Setup
 
-1️⃣ Cloner le projet
+1️ Clone the project
 
-git clone https://github.com/sarahzhf/museum-parallax.git
+git clone <repo-url>
 cd museum-parallax
 
-2️⃣ Installer les dépendances
+2️ Install dependencies
 
 npm install
 
-3️⃣ Ajouter la clé OpenAI
+If you have peer dependency conflicts:
 
-Crée un fichier :
+npm install --legacy-peer-deps
 
-.env.local
+3️ Add environment variables
 
-Avec :
+Create .env.local :
 
-OPENAI_API_KEY=ta_clef_ici
+OPENAI_API_KEY=sk-xxxx
+LANGFUSE_SECRET_KEY=lfsk_xxx
+LANGFUSE_PUBLIC_KEY=lfpk_xxx
+LANGFUSE_BASE_URL=https://cloud.langfuse.com
 
-4️⃣ Lancer le projet
+ About Langfuse in Production
+
+To enable MLOps monitoring on Vercel, add the same keys in:
+
+Vercel → Project → Settings → Environment Variables
+
+Your chatbot will then be monitored in real-time on Langfuse, even for users on the deployed website.
+
+
+▶️ Run Locally
 
 npm run dev
 
-Le musée sera accessible ici :
+Visit:
 👉 http://localhost:3000
 
+ Deployment
+
+Deploy automatically with Vercel:
+	•	Every commit to main triggers a deployment
+	•	Environment variables must be added manually in Vercel
+	•	Once deployed, all AI interactions are logged in Langfuse
+
+ MLOps Integration (Langfuse)
+
+ What is logged?
+
+For every user message:
+	•	A trace is created
+	•	A generation span for the OpenAI call
+	•	An event if the user asks to zoom / left / right
+	•	A chatbot-response event with output
+	•	A full timeline of user queries
 
 
-🚀 Déploiement (Vercel)
+ Project File Structure
 
-1) Push sur GitHub
-
-git add .
-git commit -m "update"
-git push origin main
-
-2) Vercel rebuild automatiquement
-	•	pas besoin de refaire quoi que ce soit
-	•	dès que tu pushes → ton site public se met à jour
-
-
-➕ Ajouter un nouveau tableau
-	1.	Ajouter l’image dans public/images/
-	2.	Ajouter une entrée dans artworks.ts :
-
-{
-  id: 13,
-  title: "Nom du tableau",
-  artist: "Artiste",
-  year: "Année",
-  description: "Description...",
-  image: "images/mon-image.png",
-  position: [x, y, z],
-  order: 13
-}
-
-	3.	Push → Vercel déploie automatiquement.
+app/
+ ├─ api/
+ │   └─ chat/route.ts      # AI logic + Langfuse monitoring
+ ├─ components/
+ │   ├─ gallery-3d.tsx
+ │   ├─ artwork-mesh.tsx
+ │   └─ chatbot.tsx
+ ├─ data/
+ │   └─ artworks.ts
+ └─ page.tsx
+public/
+ └─ images/
 
 
-🧠 Tech utilisées
-	•	Next.js 14
-	•	React
-	•	React Three Fiber
-	•	Drei
-	•	TypeScript
-	•	OpenAI GPT-4o-mini
-	•	Vercel
+ route.ts (AI + Langfuse)
 
+All AI reasoning and MLOps logging happens here:
+	•	Smart artwork matching
+	•	Direction detection (left/right/next to…)
+	•	Zoom detection
+	•	Description logic
+	•	Trace creation
+	•	Span recording
+	•	Event logging
 
 
 
