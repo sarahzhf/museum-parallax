@@ -44,7 +44,7 @@ export const artworks: Artwork[] = [
     technique: "Huile sur panneau de bois de peuplier",
     dimensions: "77 cm × 53 cm",
     location: "Musée du Louvre, Paris",
-    position: [-28, -0.5, -4],
+    position: [-26, -0.5, -4],
     order: 1,
   },
   {
@@ -172,7 +172,7 @@ export const artworks: Artwork[] = [
     technique: "Huile sur toile",
     dimensions: "243.9 cm × 233.7 cm",
     location: "Museum of Modern Art, New York",
-    position: [28, -1, -4],
+    position: [26, -1, -4],
     order: 10,
   },
   {
@@ -188,7 +188,7 @@ export const artworks: Artwork[] = [
     technique: "Fresque",
     dimensions: "280 cm × 570 cm",
     location: "Chapelle Sixtine, Vatican",
-    position: [35, 1, -4],
+    position: [31, 1, -4],
     order: 11,
   },
   {
@@ -204,7 +204,23 @@ export const artworks: Artwork[] = [
     technique: "Huile sur toile",
     dimensions: "260 cm × 325 cm",
     location: "Musée du Louvre, Paris",
-    position: [42, 0.5, -4],
+    position: [36, 0.5, -4],
     order: 12,
+  },
+  {
+    id: 13,
+    title: "Man with a Parrot",
+    artist: "Francesco Melzi",
+    year: "1525",
+    period: "Haute Reconnaissance",
+    style: "Haute Reconnaissance",
+    description:
+      "Portrait attribué à Francesco Melzi, un des élèves de Léonard de Vinci.",
+    image: "images/man-with-a-parot.png",
+    technique: "Huile sur toile",
+    dimensions: "260 cm × 325 cm",
+    location: "Musée des Beaux-Arts, Budapest",
+    position: [41, 1, -4],
+    order: 13,
   },
 ]

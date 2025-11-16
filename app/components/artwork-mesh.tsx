@@ -17,6 +17,7 @@ import pearlGirl from "@/public/images/girl-with-pearl.png"
 import demoiselles from "@/public/images/demoiselles-avignon.png"
 import creationAdam from "@/public/images/creation-adam.png"
 import liberty from "@/public/images/liberty-leading.png"
+import manparot from "@/public/images/man-with-a-parot.png"
 
 const textureMap: Record<string, string> = {
   "images/starry-night.png": starryNight.src,
@@ -31,6 +32,7 @@ const textureMap: Record<string, string> = {
   "images/demoiselles-avignon.png": demoiselles.src,
   "images/creation-adam.png": creationAdam.src,
   "images/liberty-leading.png": liberty.src,
+  "images/man-with-a-parot.png": manparot.src,
 }
 
 export type Artwork = {
@@ -68,12 +70,12 @@ export default function ArtworkMesh({
 
   const texture = useTexture(textureMap[artwork.image])
 
-  // ------- CURSEUR MAIN -------
+
   useEffect(() => {
     if (hovered) document.body.style.cursor = "pointer"
     else document.body.style.cursor = "default"
   }, [hovered])
-  // -----------------------------
+ 
 
   useEffect(() => {
     if (isAnimating) setAnimationProgress(0)

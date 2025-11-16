@@ -149,3 +149,4 @@ Possible future improvements
 	•	Adding multiple rooms with navigation
 	•	Voice-based interaction
 	•	Enhanced artwork clustering and suggestions
+

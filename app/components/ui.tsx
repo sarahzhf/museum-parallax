@@ -35,6 +35,7 @@ export default function UI({ scrollProgress }: UIProps) {
       "Les Demoiselles d'Avignon",
       "La Création d'Adam",
       "La Liberté guidant le peuple",
+      "Man with a Parot",
     ]
 
     const index = Math.floor(scrollProgress * artworkNames.length)
