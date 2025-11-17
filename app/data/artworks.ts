@@ -48,7 +48,7 @@ export const artworks: Artwork[] = [
     technique: "Huile sur panneau de bois de peuplier",
     dimensions: "77 cm × 53 cm",
     location: "Musée du Louvre, Paris",
-    position: [-34, 1, 3.5],
+    position: [-34, 0.2, 3.5],
     rotation: [0, Math.PI / 2 + 0.15, 0],
     order: 1,
   },
@@ -134,7 +134,7 @@ export const artworks: Artwork[] = [
     technique: "Huile, tempera et pastel sur carton",
     dimensions: "91 cm × 73.5 cm",
     location: "Galerie nationale d'Oslo",
-    position: [7, 0.25, -4],
+    position: [7.5, 0.25, -4],
     order: 7,
   },
   {
@@ -185,7 +185,7 @@ export const artworks: Artwork[] = [
     technique: "Huile sur toile",
     dimensions: "243.9 cm × 233.7 cm",
     location: "Museum of Modern Art, New York",
-    position: [25.5, 0, -4],
+    position: [25.3, 0, -4],
     order: 10,
   },
   {
@@ -236,7 +236,7 @@ export const artworks: Artwork[] = [
     technique: "Huile sur toile",
     dimensions: "260 cm × 325 cm",
     location: "Musée des Beaux-Arts, Budapest",
-    position: [43.6, 0, -4],
+    position: [44.25, 0, -4],
     order: 13,
   },
 ]
