@@ -7,10 +7,12 @@ export interface Artwork {
   style?: string
   description: string
   image: string
+  tags?: string[]
   technique?: string
   dimensions?: string
   location?: string
   position: [number, number, number]
+  rotation?: [number, number, number]
   order: number
 }
 
@@ -25,10 +27,11 @@ export const artworks: Artwork[] = [
     description:
       "Une œuvre emblématique représentant un ciel nocturne tourbillonnant au-dessus d'un village endormi.",
     image: "images/starry-night.png",
+    tags: ["bleu", "jaune", "nuit", "ciel tourbillonnant", "paysage", "village", "post-impressionnisme"],
     technique: "Huile sur toile",
     dimensions: "73.7 cm × 92.1 cm",
     location: "Museum of Modern Art, New York",
-    position: [-10, 1, -4],
+    position: [-8.8, 0.25, -4],
     order: 4,
   },
   {
@@ -41,10 +44,12 @@ export const artworks: Artwork[] = [
     description:
       "Le portrait le plus célèbre au monde, connu pour son sourire énigmatique.",
     image: "images/mona-lisa.png",
+    tags: ["portrait", "femme", "sourire", "renaissance", "visage", "marron", "mystère"],
     technique: "Huile sur panneau de bois de peuplier",
     dimensions: "77 cm × 53 cm",
     location: "Musée du Louvre, Paris",
-    position: [-26, -0.5, -4],
+    position: [-34, 1, 3.5],
+    rotation: [0, Math.PI / 2 + 0.15, 0],
     order: 1,
   },
   {
@@ -57,10 +62,11 @@ export const artworks: Artwork[] = [
     description:
       "Série de peintures impressionnistes représentant le jardin d'eau de Giverny.",
     image: "images/water-lilies.png",
+    tags: ["fleurs", "eau", "rose", "bleu", "vert", "jardin", "impressionnisme"],
     technique: "Huile sur toile",
     dimensions: "200 cm × 200 cm",
     location: "Musée de l'Orangerie, Paris",
-    position: [-21, 1.5, -4],
+    position: [-23, 0.25, -4],
     order: 2,
   },
   {
@@ -73,10 +79,11 @@ export const artworks: Artwork[] = [
     description:
       "Une œuvre puissante dénonçant les horreurs de la guerre civile espagnole.",
     image: "images/guernica.png",
+    tags: ["noir et blanc", "guerre", "cubisme", "violence", "cheval", "taureau", "dramatique"],
     technique: "Huile sur toile",
     dimensions: "349.3 cm × 776.6 cm",
     location: "Museo Reina Sofía, Madrid",
-    position: [-14, 0, -4],
+    position: [-13.5, 0.25, -4],
     order: 3,
   },
   {
@@ -89,10 +96,11 @@ export const artworks: Artwork[] = [
     description:
       "Estampe japonaise iconique représentant une vague déferlante devant le mont Fuji.",
     image: "images/great-wave.png",
+    tags: ["bleu", "vague", "mer", "japon", "mont fuji", "mouvement", "ukiyo-e"],
     technique: "Estampe sur bois",
     dimensions: "25.7 cm × 37.8 cm",
     location: "British Museum, Londres",
-    position: [-7, -1, -4],
+    position: [-4.3, 0.25, -4],
     order: 5,
   },
   {
@@ -105,10 +113,11 @@ export const artworks: Artwork[] = [
     description:
       "Œuvre surréaliste célèbre pour ses montres molles.",
     image: "images/persistence-memory.png",
+    tags: ["montres molles", "surréalisme", "paysage désertique", "temps", "bleu", "marron"],
     technique: "Huile sur toile",
     dimensions: "24 cm × 33 cm",
     location: "Museum of Modern Art, New York",
-    position: [0, 1, -4],
+    position: [0.4, 0.25, -4],
     order: 6,
   },
   {
@@ -121,10 +130,11 @@ export const artworks: Artwork[] = [
     description:
       "Expression puissante de l'angoisse existentielle.",
     image: "images/the-scream.png",
+    tags: ["cri", "visage terrifié", "ciel orange", "expressionnisme", "angoisse", "pont"],
     technique: "Huile, tempera et pastel sur carton",
     dimensions: "91 cm × 73.5 cm",
     location: "Galerie nationale d'Oslo",
-    position: [7, -0.5, -4],
+    position: [7, 0.25, -4],
     order: 7,
   },
   {
@@ -137,10 +147,11 @@ export const artworks: Artwork[] = [
     description:
       "Portrait emblématique de l'Amérique rurale.",
     image: "images/american-gothic.png",
+    tags: ["couple", "fourche", "maison", "ferme", "réalisme américain", "portrait double"],
     technique: "Huile sur panneau de bois",
     dimensions: "78 cm × 65.3 cm",
     location: "Art Institute of Chicago",
-    position: [14, 1.5, -4],
+    position: [14.5, 0.25, -4],
     order: 8,
   },
   {
@@ -153,10 +164,11 @@ export const artworks: Artwork[] = [
     description:
       "Portrait mystérieux et fascinant.",
     image: "images/girl-with-pearl.png",
+    tags: ["portrait", "fille", "perle", "turban bleu", "baroque", "regard"],
     technique: "Huile sur toile",
     dimensions: "44.5 cm × 39 cm",
     location: "Mauritshuis, La Haye",
-    position: [21, 0, -4],
+    position: [20.6, 0.25, -4],
     order: 9,
   },
   {
@@ -169,10 +181,11 @@ export const artworks: Artwork[] = [
     description:
       "Œuvre révolutionnaire marquant la naissance du cubisme.",
     image: "images/demoiselles-avignon.png",
+    tags: ["cinq femmes", "cubisme", "rose", "formes angulaires", "visages masques", "avant-garde"],
     technique: "Huile sur toile",
     dimensions: "243.9 cm × 233.7 cm",
     location: "Museum of Modern Art, New York",
-    position: [26, -1, -4],
+    position: [25.5, 0, -4],
     order: 10,
   },
   {
@@ -185,10 +198,11 @@ export const artworks: Artwork[] = [
     description:
       "Fresque emblématique de la Chapelle Sixtine.",
     image: "images/creation-adam.png",
+    tags: ["adam", "dieu", "mains", "fresque", "renaissance", "chapelle sixtine"],
     technique: "Fresque",
     dimensions: "280 cm × 570 cm",
     location: "Chapelle Sixtine, Vatican",
-    position: [31, 1, -4],
+    position: [29.5, 0, -4],
     order: 11,
   },
   {
@@ -201,10 +215,11 @@ export const artworks: Artwork[] = [
     description:
       "Allégorie de la Révolution de juillet 1830.",
     image: "images/liberty-leading.png",
+    tags: ["révolution", "drapeau français", "liberté", "barricades", "foule", "romantisme"],
     technique: "Huile sur toile",
     dimensions: "260 cm × 325 cm",
     location: "Musée du Louvre, Paris",
-    position: [36, 0.5, -4],
+    position: [39, 0, -4],
     order: 12,
   },
   {
@@ -217,10 +232,11 @@ export const artworks: Artwork[] = [
     description:
       "Portrait attribué à Francesco Melzi, un des élèves de Léonard de Vinci.",
     image: "images/man-with-a-parot.png",
+    tags: ["portrait", "homme", "perroquet", "renaissance", "mélzi", "détail costume"],
     technique: "Huile sur toile",
     dimensions: "260 cm × 325 cm",
     location: "Musée des Beaux-Arts, Budapest",
-    position: [41, 1, -4],
+    position: [43.6, 0, -4],
     order: 13,
   },
 ]

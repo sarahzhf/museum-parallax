@@ -8,9 +8,10 @@ import { artworks as artworksData } from "@/app/data/artworks"
 
 interface UIProps {
   scrollProgress: number
+  onArtworkChange: (title: string) => void
 }
 
-export default function UI({ scrollProgress }: UIProps) {
+export default function UI({ scrollProgress, onArtworkChange }: UIProps) {
   const [showInstructions, setShowInstructions] = useState(true)
   const [currentArtwork, setCurrentArtwork] = useState("")
   const [searchOpen, setSearchOpen] = useState(false)
@@ -39,6 +40,7 @@ export default function UI({ scrollProgress }: UIProps) {
 
     const selected = sorted[index];
     setCurrentArtwork(selected ? selected.title : "");
+    onArtworkChange(selected ? selected.title : "");
   }, [scrollProgress]);
 
   return (

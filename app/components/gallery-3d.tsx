@@ -88,7 +88,7 @@ export default function Gallery3D({
       <pointLight position={[15, 8, 8]} intensity={0.8} color="#ffd1b3" />
 
       {/* Lampes ambiance */}
-      {[-30, -20, -10, 0, 10, 20, 30].map((x, i) => (
+      {[-30, -20, -10, 0, 10].map((x, i) => (
         <group key={i} position={[x, 4.5, 0]}>
           <pointLight intensity={1.2} distance={12} color="#ffb366" />
           <mesh>
@@ -125,7 +125,7 @@ export default function Gallery3D({
         </mesh>
 
         {/* Mur droit */}
-        <mesh position={[100, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh position={[55, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
           <planeGeometry args={[25, 18]} />
           <primitive object={materials.marbleMaterial} attach="material" />
         </mesh>

@@ -82,7 +82,13 @@ export default function MuseumPage() {
       <div className="fixed inset-0 w-full h-full pointer-events-auto">
         <Canvas
           camera={{ position: [0, 0, 8], fov: 60 }}
-          gl={{ antialias: true }}
+          gl={{
+            powerPreference: "low-power",
+            antialias: false,
+            stencil: false,
+            depth: true,
+          }}
+          dpr={[1, 1.5]}
           onCreated={() => setSceneReady(true)}
         >
           <Suspense fallback={null}>
@@ -99,7 +105,10 @@ export default function MuseumPage() {
       </div>
 
       {/* UI */}
-      <UI scrollProgress={scrollProgress} />
+      <UI
+        scrollProgress={scrollProgress}
+        onArtworkChange={() => {}}
+      />
 
       {/* CHATBOT */}
       <Chatbot

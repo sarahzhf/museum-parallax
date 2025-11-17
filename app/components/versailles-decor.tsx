@@ -1,5 +1,6 @@
 "use client"
 import type * as THREE from "three"
+import { Instances, Instance } from "@react-three/drei"
 
 interface VersaillesDecorProps {
   goldMaterial: THREE.Material
@@ -9,41 +10,43 @@ interface VersaillesDecorProps {
 export default function VersaillesDecor({ goldMaterial, marbleMaterial }: VersaillesDecorProps) {
   // Créer des moulures et décorations style Versailles
   return (
-    <>
+    <group frustumCulled={true}>
       {/* Moulures dorées au plafond */}
-      <group position={[0, 4.9, 0]}>
-        {[-25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25].map((x, i) => (
-          <mesh key={i} position={[x, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <boxGeometry args={[0.5, 10, 0.2]} />
-            <primitive object={goldMaterial} attach="material" />
-          </mesh>
-        ))}
+      <group position={[0, 5.4, 0]}>
+        <Instances limit={8} position={[0,0,0]} rotation={[-Math.PI/2,0,0]}>
+          <boxGeometry args={[0.5, 10, 0.2]} />
+          <primitive object={goldMaterial} attach="material" />
+          {[-30,-25,-20,-15,-10,-5,0,5,10,15,20,25,30,35,40,45].map((x,i)=>(
+            <Instance key={i} position={[x,0,0]} />
+          ))}
+        </Instances>
 
-        {[-5, -2.5, 0, 2.5, 5].map((z, i) => (
+        {[-20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50].map((z, i) => (
           <mesh key={i} position={[0, 0, z]} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
-            <boxGeometry args={[0.5, 50, 0.2]} />
+            <boxGeometry args={[0.5, 20, 0.2]} />
             <primitive object={goldMaterial} attach="material" />
           </mesh>
         ))}
       </group>
 
       {/* Colonnes corinthiennes */}
-      {[-20, -10, 0, 10, 20].map((x, i) => (
-        <group key={i} position={[x, -4, -4.5]}>
-          {/* Base de la colonne */}
+      {[-20, 10, 23.25, 53].map((x, i) => (
+        <group key={i} position={[x, -4.9, -4.5]}>
+          
+          {/* Base de la colonne — touche le sol */}
           <mesh position={[0, 0.5, 0]}>
             <boxGeometry args={[1.5, 1, 1.5]} />
             <primitive object={marbleMaterial} attach="material" />
           </mesh>
 
-          {/* Fût de la colonne */}
-          <mesh position={[0, 4.5, 0]}>
-            <cylinderGeometry args={[0.5, 0.6, 8, 16]} />
+          {/* Fût — du sol au plafond */}
+          <mesh position={[0, 5.15, 0]}>
+            <cylinderGeometry args={[0.5, 0.6, 10.3, 16]} />
             <primitive object={marbleMaterial} attach="material" />
           </mesh>
 
-          {/* Chapiteau */}
-          <mesh position={[0, 8.5, 0]}>
+          {/* Chapiteau — collé au plafond */}
+          <mesh position={[0, 10.3, 0]}>
             <boxGeometry args={[1.2, 0.8, 1.2]} />
             <primitive object={goldMaterial} attach="material" />
           </mesh>
@@ -51,21 +54,21 @@ export default function VersaillesDecor({ goldMaterial, marbleMaterial }: Versai
       ))}
 
       {/* Moulures dorées sur les murs */}
-      <group position={[0, 0, -4.9]}>
+      <group position={[0, 0, -4.9,]}>
         {/* Cadre horizontal supérieur */}
-        <mesh position={[0, 3, 0]}>
-          <boxGeometry args={[50, 0.3, 0.1]} />
+        <mesh position={[15, 3, 0]}>
+          <boxGeometry args={[95, 0.3, 0.1]} />
           <primitive object={goldMaterial} attach="material" />
         </mesh>
 
         {/* Cadre horizontal inférieur */}
-        <mesh position={[0, -3, 0]}>
-          <boxGeometry args={[50, 0.3, 0.1]} />
+        <mesh position={[15, -3, 0]}>
+          <boxGeometry args={[95, 0.3, 0.1]} />
           <primitive object={goldMaterial} attach="material" />
         </mesh>
 
         {/* Cadres verticaux */}
-        {[-22.5, -17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5, 22.5].map((x, i) => (
+        {[-27.5,-22.5, -17.5, -12.5, -7.5, -2.5, 2.5, 7.5, 12.5, 17.5, 22.5, 27.5, 32.5, 37.5, 42.5, 47.5].map((x, i) => (
           <mesh key={i} position={[x, 0, 0]}>
             <boxGeometry args={[0.3, 6, 0.1]} />
             <primitive object={goldMaterial} attach="material" />
@@ -74,11 +77,11 @@ export default function VersaillesDecor({ goldMaterial, marbleMaterial }: Versai
       </group>
 
       {/* Lustres ornés */}
-      {[-15, 0, 15].map((x, i) => (
+      {[-5, 15, 33].map((x, i) => (
         <group key={i} position={[x, 3, 0]}>
           {/* Structure principale du lustre */}
           <mesh>
-            <sphereGeometry args={[0.5, 16, 16]} />
+            <sphereGeometry args={[0.5, 8, 8]} />
             <primitive object={goldMaterial} attach="material" />
           </mesh>
 
@@ -97,7 +100,14 @@ export default function VersaillesDecor({ goldMaterial, marbleMaterial }: Versai
               </mesh>
 
               {/* Flamme */}
-              <pointLight position={[1.2, -0.9, 0]} intensity={0.5} distance={3} decay={2} color="#ffb366" />
+              <pointLight 
+                position={[1.2, -0.9, 0]} 
+                intensity={0.25} 
+                distance={1.2} 
+                decay={1} 
+                castShadow={false}
+                color="#ffb366" 
+              />
               <mesh position={[1.2, -0.9, 0]}>
                 <sphereGeometry args={[0.05, 8, 8]} />
                 <meshStandardMaterial color="#ffb366" emissive="#ff9933" emissiveIntensity={1} />
@@ -108,7 +118,7 @@ export default function VersaillesDecor({ goldMaterial, marbleMaterial }: Versai
       ))}
 
       {/* Miroirs ornés */}
-      {[-18, -6, 6, 18].map((x, i) => (
+      {[-18, 3.4, 18, 35].map((x, i) => (
         <group key={i} position={[x, 0, -4.8]}>
           {/* Cadre doré */}
           <mesh>
@@ -119,17 +129,14 @@ export default function VersaillesDecor({ goldMaterial, marbleMaterial }: Versai
           {/* Surface du miroir */}
           <mesh position={[0, 0, 0.11]}>
             <boxGeometry args={[2.6, 4.6, 0.05]} />
-            <meshPhysicalMaterial
+            <meshStandardMaterial 
               color="#e0e0e0"
-              metalness={0.9}
-              roughness={0.1}
-              reflectivity={0.9}
-              clearcoat={1}
-              clearcoatRoughness={0.1}
+              metalness={0.8}
+              roughness={0.2}
             />
           </mesh>
         </group>
       ))}
-    </>
+    </group>
   )
 }

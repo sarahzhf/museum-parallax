@@ -43,6 +43,7 @@ export type Artwork = {
   image: string
   description: string
   position: [number, number, number]
+  rotation?: [number, number, number]
   order: number
 }
 
@@ -52,6 +53,7 @@ interface ArtworkMeshProps {
   onClick: () => void
   goldMaterial?: THREE.Material
   isAnimating?: boolean
+  rotation?: [number, number, number]
 }
 
 export default function ArtworkMesh({
@@ -104,7 +106,6 @@ export default function ArtworkMesh({
       const currentPos = startPos.lerp(endPos, animationProgress)
       groupRef.current.position.copy(currentPos)
 
-      groupRef.current.rotation.y = animationProgress * Math.PI * 2
       groupRef.current.scale.setScalar(1 + animationProgress * 2)
 
       const material = meshRef.current.material as THREE.MeshStandardMaterial
@@ -114,7 +115,7 @@ export default function ArtworkMesh({
     // reset when not animating
     if (!isAnimating) {
       groupRef.current.position.set(...position)
-      groupRef.current.rotation.y = 0
+      groupRef.current.rotation.set(...(artwork.rotation || [0,0,0]))
       groupRef.current.scale.setScalar(1)
 
       const material = meshRef.current.material as THREE.MeshStandardMaterial
@@ -131,7 +132,7 @@ export default function ArtworkMesh({
     })
 
   return (
-    <group ref={groupRef} position={position}>
+    <group ref={groupRef} position={position} rotation={artwork.rotation ?? [0,0,0]}>
       <mesh
         ref={frameRef}
         onPointerOver={() => setHovered(true)}
